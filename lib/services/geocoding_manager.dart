@@ -29,7 +29,7 @@ class GeocodingManager {
 
         return addressParts.isEmpty
             ? 'Localização não encontrada'
-            : addressParts.join(', ');
+            : "${addressParts.join(', ')}\nLat.:$latitude, Long.:$longitude";
       }
       return 'Localização não encontrada';
     } catch (e) {
