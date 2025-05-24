@@ -121,11 +121,12 @@ class _InterestPointsScreenState extends State<InterestPointsScreen> {
 
                 final result = await showDialog<PontoInteresse>(
                   context: context,
-                  builder: (context) => Dialog(
-                    child: RegisterPointScreen(
-                      currentPosition: _currentPosition,
-                    ),
-                  ),
+                  builder:
+                      (context) => Dialog(
+                        child: RegisterPointScreen(
+                          currentPosition: _currentPosition,
+                        ),
+                      ),
                 );
 
                 if (result != null) {
@@ -139,7 +140,6 @@ class _InterestPointsScreenState extends State<InterestPointsScreen> {
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.add, color: Colors.white),
                   SizedBox(width: 8),
                   Text(
                     'Adicionar Ponto',
@@ -186,7 +186,10 @@ class _InterestPointsScreenState extends State<InterestPointsScreen> {
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
                                 onPressed: () => _removePonto(ponto),
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(),
