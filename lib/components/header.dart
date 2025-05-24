@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../services/geolocator_manager.dart';
+import '../services/geocoding_manager.dart';
 
 class Header extends StatefulWidget implements PreferredSizeWidget {
   final String titlePlaceholder;
@@ -21,7 +22,9 @@ class Header extends StatefulWidget implements PreferredSizeWidget {
 
 class _HeaderState extends State<Header> {
   Position? currentPosition;
+  String currentAddress = '';
   final GeolocatorManager _geolocatorManager = GeolocatorManager();
+  final GeocodingManager _geocodingManager = GeocodingManager();
 
   @override
   void initState() {
@@ -33,8 +36,13 @@ class _HeaderState extends State<Header> {
     try {
       debugPrint('Obtendo localização...');
       final position = await _geolocatorManager.determinePosition();
+      final address = await _geocodingManager.getAddressFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
       setState(() {
         currentPosition = position;
+        currentAddress = address;
       });
       widget.onLocationUpdate?.call(position);
     } catch (e) {
@@ -106,7 +114,9 @@ class _HeaderState extends State<Header> {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    _formatLocation(),
+                    currentAddress.isEmpty
+                        ? 'Buscando localização...'
+                        : currentAddress,
                     style: theme.textTheme.titleMedium?.copyWith(
                       color: Colors.white.withOpacity(0.9),
                       fontSize: 14,
