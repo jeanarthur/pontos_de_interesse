@@ -1,7 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 
 class GeolocatorManager {
-  Future<Position> _determinePosition() async {
+  Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -26,7 +26,7 @@ class GeolocatorManager {
     return await Geolocator.getCurrentPosition();
   }
 
-  double _distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude){
+  double distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude){
     return Geolocator.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude);
   }
 }
