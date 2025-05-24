@@ -4,8 +4,13 @@ import '../services/geolocator_manager.dart';
 
 class Header extends StatefulWidget implements PreferredSizeWidget {
   final String titlePlaceholder;
+  final Function(Position)? onLocationUpdate;
 
-  const Header({super.key, this.titlePlaceholder = 'Pontos de interesse'});
+  const Header({
+    super.key,
+    this.titlePlaceholder = 'Pontos de interesse',
+    this.onLocationUpdate,
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(120);
@@ -31,6 +36,7 @@ class _HeaderState extends State<Header> {
       setState(() {
         currentPosition = position;
       });
+      widget.onLocationUpdate?.call(position);
     } catch (e) {
       // Você pode adicionar um tratamento de erro mais específico aqui se desejar
       debugPrint('Erro ao obter localização: $e');
