@@ -5,6 +5,7 @@ import '../services/geolocator_manager.dart';
 import 'package:geolocator/geolocator.dart';
 import '../services/interest_points_manager.dart';
 import '../screens/register_point_screen.dart';
+import '../services/geocoding_manager.dart';
 
 class InterestPointsScreen extends StatefulWidget {
   const InterestPointsScreen({super.key});
@@ -18,6 +19,8 @@ class _InterestPointsScreenState extends State<InterestPointsScreen> {
   InterestPointsManager? _pointsManager;
   Position? _currentPosition;
   List<PontoInteresse> _pontos = [];
+  final GeocodingManager _geocodingManager = GeocodingManager();
+  Map<String, String> _addressCache = {};
 
   @override
   void initState() {
@@ -45,6 +48,11 @@ class _InterestPointsScreenState extends State<InterestPointsScreen> {
     setState(() {
       _pontos = pontos;
     });
+
+    // Carrega os endereços para cada ponto
+    for (var ponto in _pontos) {
+      await _loadAddress(ponto);
+    }
   }
 
   Future<void> _addPonto(PontoInteresse ponto) async {
@@ -56,7 +64,7 @@ class _InterestPointsScreenState extends State<InterestPointsScreen> {
     final success = await _pointsManager!.addPonto(ponto);
     debugPrint('Resultado do addPonto: $success');
     if (success) {
-      await _loadPontos();
+      await _loadPontos(); // Isso já vai carregar o endereço do novo ponto
     }
   }
 
@@ -95,6 +103,18 @@ class _InterestPointsScreenState extends State<InterestPointsScreen> {
       return '${distance.toStringAsFixed(0)} m';
     } else {
       return '${(distance / 1000).toStringAsFixed(1)} km';
+    }
+  }
+
+  Future<void> _loadAddress(PontoInteresse ponto) async {
+    if (!_addressCache.containsKey(ponto.toString())) {
+      final address = await _geocodingManager.getAddressFromCoordinates(
+        ponto.latitude,
+        ponto.longitude,
+      );
+      setState(() {
+        _addressCache[ponto.toString()] = address;
+      });
     }
   }
 
@@ -196,6 +216,19 @@ class _InterestPointsScreenState extends State<InterestPointsScreen> {
                                 splashRadius: 20,
                               ),
                             ],
+                          ),
+                          const SizedBox(height: 4),
+                          Center(
+                            child: Text(
+                              _addressCache[ponto.toString()] ??
+                                  'Carregando endereço...',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 8),
                           Row(

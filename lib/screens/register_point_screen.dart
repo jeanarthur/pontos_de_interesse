@@ -144,14 +144,14 @@ class _RegisterPointScreenState extends State<RegisterPointScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
                 children: [
                   TextButton.icon(
                     onPressed: _useCurrentLocation,
                     icon: const Icon(Icons.my_location),
                     label: const Text('Usar Localização Atual'),
                   ),
+                  const SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: _submitForm,
                     style: ElevatedButton.styleFrom(
@@ -160,6 +160,7 @@ class _RegisterPointScreenState extends State<RegisterPointScreen> {
                         Colors.black,
                         0.2,
                       ),
+                      minimumSize: const Size(double.infinity, 48),
                     ),
                     child: const Text(
                       'Salvar',
