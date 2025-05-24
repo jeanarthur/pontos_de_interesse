@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'components/header.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'screens/interest_points_screen.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  usePathUrlStrategy();
+  await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 
@@ -29,11 +34,6 @@ class Main extends StatefulWidget {
 class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: Header(
-        titlePlaceholder: 'Pontos de Interesse'
-      ),
-      body: const Center(child: Text('Hello, World!')),
-    );
+    return const InterestPointsScreen();
   }
 }
